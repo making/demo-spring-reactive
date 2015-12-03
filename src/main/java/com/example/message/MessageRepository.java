@@ -32,7 +32,7 @@ public class MessageRepository {
                             return this.collection
                                     .insertOne(new Document("text", message
                                             .getText()));
-                        }).reduce(0L, (x, y) -> x + 1);
+                        }).reduce(0L, (x, y) -> x + 1L);
     }
 
     public Publisher<Message> findAll() {
