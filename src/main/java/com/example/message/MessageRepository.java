@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import reactor.Publishers;
 import reactor.rx.Streams;
 
 import com.mongodb.reactivestreams.client.MongoCollection;
@@ -25,7 +24,7 @@ public class MessageRepository {
         this.collection = database.getCollection("message");
     }
 
-    public Publisher<Void> insert(Publisher<Message> messagePublisher) {
+    public Publisher<Long> insert(Publisher<Message> messagePublisher) {
         return Streams.wrap(messagePublisher)
                 .flatMap(
                         message -> {
@@ -33,7 +32,7 @@ public class MessageRepository {
                             return this.collection
                                     .insertOne(new Document("text", message
                                             .getText()));
-                        }).flatMap(p -> Publishers.empty());
+                        }).reduce(0L, (x, y) -> x + 1);
     }
 
     public Publisher<Message> findAll() {

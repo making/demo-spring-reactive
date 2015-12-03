@@ -21,7 +21,7 @@ public class MessageController {
 
     @ResponseBody
     @RequestMapping(path = "/message", method = RequestMethod.POST)
-    Publisher<Void> post(@RequestBody Publisher<Message> messagePublisher) {
+    Publisher<Long> post(@RequestBody Publisher<Message> messagePublisher) {
         return messageRepository.insert(messagePublisher);
     }
 
